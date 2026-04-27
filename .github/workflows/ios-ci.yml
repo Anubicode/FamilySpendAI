@@ -154,7 +154,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$LOGS_DIR/ui_screenshots"
-          bash ci/export-ui-screenshots.sh "$LOGS_DIR/ui-tests.xcresult" "$LOGS_DIR/ui_screenshots"
+          bash ci/export-ui-screenshots.sh "$LOGS_DIR/ui-tests.xcresult" "$LOGS_DIR/ui_screenshots" "$LOGS_DIR/xcodebuild-ui-test.log"
 
       - name: Upload CI logs
         if: always()
