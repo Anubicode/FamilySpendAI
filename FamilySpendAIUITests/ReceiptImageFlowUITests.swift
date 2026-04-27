@@ -7,6 +7,7 @@ final class ReceiptImageFlowUITests: XCTestCase {
 
     func testWalmartReceiptImageFlow() throws {
         let app = makeApp()
+        let expectedMerchant = "WALMART"
         app.launch()
 
         openScanTab(in: app)
@@ -20,17 +21,19 @@ final class ReceiptImageFlowUITests: XCTestCase {
         let merchantValue = normalizedMerchantValue(from: merchantField)
         XCTAssertTrue(waitForElementToAppear(app.textFields["receiptReview.totalField"], in: app, timeout: 8))
         addScreenshot(named: "receipt-review-walmart", in: app)
-        XCTAssertTrue(merchantValue.uppercased().contains("WALMART"))
+        XCTAssertTrue(merchantValue.uppercased().contains(expectedMerchant))
 
         app.buttons["receiptReview.saveButton"].tap()
 
         openTransactionsTab(in: app)
-        XCTAssertTrue(waitForTransactionRow(containing: merchantValue, in: app, timeout: 5))
+        XCTAssertTrue(waitForTransactionRow(containing: expectedMerchant, in: app, timeout: 5))
         addScreenshot(named: "transactions-after-receipt-save", in: app)
     }
 
     func testMessyReceiptRequiresReview() throws {
         let app = makeApp()
+        let expectedMerchant = "MESSY RECEIPT"
+        let expectedAmountFragment = "101.70"
         app.launch()
 
         openScanTab(in: app)
@@ -40,6 +43,7 @@ final class ReceiptImageFlowUITests: XCTestCase {
         let merchantField = app.textFields["receiptReview.merchantField"]
         XCTAssertTrue(merchantField.waitForExistence(timeout: 8))
         let merchantValue = normalizedMerchantValue(from: merchantField)
+        XCTAssertTrue(merchantValue.uppercased().contains("MESSY"))
         XCTAssertTrue(waitForLowConfidenceWarning(in: app, timeout: 5))
         XCTAssertTrue(app.buttons["receiptReview.saveButton"].exists)
         addScreenshot(named: "receipt-review-messy", in: app)
@@ -47,7 +51,7 @@ final class ReceiptImageFlowUITests: XCTestCase {
         app.buttons["receiptReview.saveButton"].tap()
 
         openTransactionsTab(in: app)
-        XCTAssertTrue(waitForTransactionRow(containing: merchantValue, in: app, timeout: 5))
+        XCTAssertTrue(waitForTransactionRow(containing: expectedAmountFragment, in: app, timeout: 5))
     }
 
     private func makeApp() -> XCUIApplication {
