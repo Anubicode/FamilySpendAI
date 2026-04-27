@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ScanReceiptView: View {
     @StateObject private var viewModel = ReceiptScannerViewModel()
+    @State private var selectedPhotoItem: PhotosPickerItem?
 
     var body: some View {
         ScrollView {
@@ -21,13 +22,14 @@ struct ScanReceiptView: View {
                     initialDraft: draft,
                     imageData: viewModel.selectedImageData
                 ) {
+                    selectedPhotoItem = nil
                     viewModel.clearResult()
                 }
             }
         }
-        .task(id: viewModel.selectedPhotoItem) {
-            if viewModel.selectedPhotoItem != nil {
-                await viewModel.processSelectedPhoto()
+        .task(id: selectedPhotoItem) {
+            if let selectedPhotoItem {
+                await loadSelectedPhoto(from: selectedPhotoItem)
             }
         }
     }
@@ -50,7 +52,7 @@ struct ScanReceiptView: View {
     private var sourceCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             PhotosPicker(
-                selection: $viewModel.selectedPhotoItem,
+                selection: $selectedPhotoItem,
                 matching: .images,
                 photoLibrary: .shared()
             ) {
@@ -119,5 +121,16 @@ struct ScanReceiptView: View {
     private var cardBackground: some View {
         RoundedRectangle(cornerRadius: 18, style: .continuous)
             .fill(Color(.secondarySystemBackground))
+    }
+
+    @MainActor
+    private func loadSelectedPhoto(from item: PhotosPickerItem) async {
+        do {
+            let data = try await item.loadTransferable(type: Data.self)
+            await viewModel.processSelectedImageData(data)
+        } catch {
+            viewModel.clearResult()
+            viewModel.errorMessage = "The selected image could not be loaded."
+        }
     }
 }

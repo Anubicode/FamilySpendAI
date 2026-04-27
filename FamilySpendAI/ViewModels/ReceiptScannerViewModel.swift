@@ -1,9 +1,8 @@
+import Combine
 import Foundation
-import PhotosUI
 
 @MainActor
 final class ReceiptScannerViewModel: ObservableObject {
-    @Published var selectedPhotoItem: PhotosPickerItem?
     @Published var isProcessing = false
     @Published var errorMessage: String?
     @Published var recognizedTextPreview = ""
@@ -21,9 +20,7 @@ final class ReceiptScannerViewModel: ObservableObject {
         self.parsingService = parsingService
     }
 
-    func processSelectedPhoto() async {
-        guard let selectedPhotoItem else { return }
-
+    func processSelectedImageData(_ data: Data?) async {
         isProcessing = true
         errorMessage = nil
         recognizedTextPreview = ""
@@ -32,7 +29,7 @@ final class ReceiptScannerViewModel: ObservableObject {
         defer { isProcessing = false }
 
         do {
-            guard let data = try await selectedPhotoItem.loadTransferable(type: Data.self), !data.isEmpty else {
+            guard let data, !data.isEmpty else {
                 errorMessage = "The selected image could not be loaded."
                 return
             }
@@ -59,7 +56,6 @@ final class ReceiptScannerViewModel: ObservableObject {
     }
 
     func clearResult() {
-        selectedPhotoItem = nil
         selectedImageData = nil
         recognizedTextPreview = ""
         reviewDraft = nil
