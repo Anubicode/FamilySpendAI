@@ -3,7 +3,6 @@ set -euo pipefail
 
 RESULT_BUNDLE="${1:-}"
 OUTPUT_DIR="${2:-}"
-UI_TEST_LOG="${3:-}"
 
 if [[ -z "$RESULT_BUNDLE" || -z "$OUTPUT_DIR" ]]; then
   echo "Usage: $0 <ui-tests.xcresult> <output-dir>"
@@ -21,7 +20,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 echo "Exporting UI test attachments from $RESULT_BUNDLE"
-if ! xcrun xcresulttool export attachments --path "$RESULT_BUNDLE" --output-path "$TEMP_DIR"; then
+if ! xcrun xcresulttool export attachments --path "$RESULT_BUNDLE" --output-path "$TEMP_DIR" | tee "$TEMP_DIR/export.log"; then
   echo "Warning: Failed to export attachments from $RESULT_BUNDLE"
   exit 0
 fi
@@ -59,18 +58,20 @@ copy_attachment "receipt-review-walmart" true
 copy_attachment "receipt-review-messy" false
 copy_attachment "transactions-after-receipt-save" true
 
-map_by_log_order() {
-  local log_path="$1"
-  if [[ -z "$log_path" || ! -f "$log_path" ]]; then
-    echo "Warning: UI test log not found for fallback screenshot naming."
+copy_from_export_log() {
+  local export_log="$TEMP_DIR/export.log"
+  if [[ ! -f "$export_log" ]]; then
+    echo "Warning: xcresult export log was not captured."
     return 0
   fi
 
-  mapfile -t attachment_names < <(
-    python - "$log_path" <<'PY'
+  python - "$TEMP_DIR" "$OUTPUT_DIR" "$export_log" <<'PY'
+import os
 import re
+import shutil
 import sys
 
+temp_dir, output_dir, export_log = sys.argv[1:4]
 wanted = {
     "scan-screen-sample-buttons",
     "receipt-review-walmart",
@@ -78,63 +79,36 @@ wanted = {
     "transactions-after-receipt-save",
 }
 
-seen = []
-with open(sys.argv[1], "r", encoding="utf-8", errors="ignore") as handle:
+pattern = re.compile(r'File:\s*([^,]+), suggested name:\s*"([^"]+)"')
+found_any = False
+
+with open(export_log, "r", encoding="utf-8", errors="ignore") as handle:
     for line in handle:
-        match = re.search(r"Added attachment named '([^']+)'", line)
+        match = pattern.search(line)
         if not match:
             continue
-        name = match.group(1)
-        if name in wanted:
-            seen.append(name)
 
-for name in seen:
-    print(name)
+        filename = match.group(1).strip()
+        suggested_name = match.group(2).strip()
+        base_name = suggested_name.split("_0_", 1)[0]
+        if base_name not in wanted:
+            continue
+
+        source = os.path.join(temp_dir, filename)
+        destination = os.path.join(output_dir, f"{base_name}.png")
+        if not os.path.exists(source) or os.path.exists(destination):
+            continue
+
+        shutil.copyfile(source, destination)
+        print(f"Saved screenshot from export log: {destination}")
+        found_any = True
+
+if not found_any:
+    print("Warning: No screenshot files were matched from xcresult export output.")
 PY
-  )
-
-  if [[ "${#attachment_names[@]}" -eq 0 ]]; then
-    echo "Warning: No screenshot attachment names were found in $log_path"
-    return 0
-  fi
-
-  mapfile -t exported_images < <(
-    find "$TEMP_DIR" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.heic' \) | sort
-  )
-
-  if [[ "${#exported_images[@]}" -eq 0 ]]; then
-    echo "Warning: No exported image attachments were found in $TEMP_DIR"
-    return 0
-  fi
-
-  local count="${#attachment_names[@]}"
-  if [[ "${#exported_images[@]}" -lt "$count" ]]; then
-    count="${#exported_images[@]}"
-    echo "Warning: Found fewer exported images than named attachments; exporting the first $count file(s)."
-  fi
-
-  local index
-  for ((index=0; index<count; index++)); do
-    local name="${attachment_names[$index]}"
-    local source="${exported_images[$index]}"
-    local destination="$OUTPUT_DIR/${name}.png"
-
-    if [[ -f "$destination" ]]; then
-      continue
-    fi
-
-    local extension="${source##*.}"
-    if [[ "${extension,,}" == "png" ]]; then
-      cp "$source" "$destination"
-    else
-      sips -s format png "$source" --out "$destination" >/dev/null
-    fi
-
-    echo "Saved screenshot by log order: $destination"
-  done
 }
 
-map_by_log_order "$UI_TEST_LOG"
+copy_from_export_log
 
 png_count="$(find "$OUTPUT_DIR" -maxdepth 1 -type f -name '*.png' | wc -l | tr -d ' ')"
 if [[ "$png_count" == "0" ]]; then
