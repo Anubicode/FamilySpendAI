@@ -170,26 +170,57 @@ struct ReceiptParsingService {
 
     private func parseDate(_ rawValue: String) -> Date? {
         let trimmed = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let formatters = dateFormatters()
+        if let slashDate = parseSlashDate(trimmed) {
+            return slashDate
+        }
 
-        for formatter in formatters {
-            if formatter.dateFormat == "MM/dd/yyyy",
-               let date = formatter.date(from: trimmed),
-               let ddFormatter = dateFormatters().first(where: { $0.dateFormat == "dd/MM/yyyy" }),
-               let components = ddFormatter.date(from: trimmed).map({ calendar.dateComponents([.day, .month], from: $0) }),
-               let day = components.day,
-               let month = components.month,
-               day <= 12,
-               month <= 12 {
-                continue
-            }
-
+        for formatter in dateFormatters() {
             if let date = formatter.date(from: trimmed) {
                 return calendar.startOfDay(for: date)
             }
         }
 
         return nil
+    }
+
+    private func parseSlashDate(_ rawValue: String) -> Date? {
+        let parts = rawValue.split(separator: "/")
+        guard parts.count == 3 else { return nil }
+        guard
+            let first = Int(parts[0]),
+            let second = Int(parts[1]),
+            let year = Int(parts[2]),
+            year >= 2000
+        else {
+            return nil
+        }
+
+        let day: Int
+        let month: Int
+
+        if first > 12 {
+            day = first
+            month = second
+        } else if second > 12 {
+            day = second
+            month = first
+        } else {
+            day = first
+            month = second
+        }
+
+        guard (1...31).contains(day), (1...12).contains(month) else {
+            return nil
+        }
+
+        let components = DateComponents(
+            calendar: calendar,
+            timeZone: calendar.timeZone,
+            year: year,
+            month: month,
+            day: day
+        )
+        return components.date.map { calendar.startOfDay(for: $0) }
     }
 
     private func dateFormatters() -> [DateFormatter] {
@@ -209,7 +240,7 @@ struct ReceiptParsingService {
             formatter.calendar = calendar
             formatter.timeZone = calendar.timeZone
             formatter.dateFormat = format
-            formatter.isLenient = true
+            formatter.isLenient = false
             return formatter
         }
     }
