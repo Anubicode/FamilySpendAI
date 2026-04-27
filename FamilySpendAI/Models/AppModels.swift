@@ -145,7 +145,19 @@ struct ReceiptFieldConfidence: Codable, Hashable {
     var date: Double
     var subtotal: Double
     var tax: Double
+    var tip: Double
+    var discount: Double
     var total: Double
+
+    static let zero = ReceiptFieldConfidence(
+        merchant: 0,
+        date: 0,
+        subtotal: 0,
+        tax: 0,
+        tip: 0,
+        discount: 0,
+        total: 0
+    )
 }
 
 @Model

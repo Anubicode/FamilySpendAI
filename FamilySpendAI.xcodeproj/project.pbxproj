@@ -21,6 +21,13 @@
 		00100000000000000000000C /* PlaceholderFeatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000C /* PlaceholderFeatureView.swift */; };
 		00100000000000000000000D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000E /* Assets.xcassets */; };
 		00100000000000000000000E /* BudgetEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000D /* BudgetEngineTests.swift */; };
+		00100000000000000000000F /* ReceiptDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000012 /* ReceiptDraft.swift */; };
+		001000000000000000000010 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000013 /* OCRService.swift */; };
+		001000000000000000000011 /* ReceiptParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000014 /* ReceiptParsingService.swift */; };
+		001000000000000000000012 /* ReceiptScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000015 /* ReceiptScannerViewModel.swift */; };
+		001000000000000000000013 /* ScanReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000016 /* ScanReceiptView.swift */; };
+		001000000000000000000014 /* ReceiptReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000017 /* ReceiptReviewView.swift */; };
+		001000000000000000000015 /* ReceiptParsingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000018 /* ReceiptParsingServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +58,13 @@
 		00200000000000000000000F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		002000000000000000000010 /* FamilySpendAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FamilySpendAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		002000000000000000000011 /* FamilySpendAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FamilySpendAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		002000000000000000000012 /* ReceiptDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDraft.swift; sourceTree = "<group>"; };
+		002000000000000000000013 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		002000000000000000000014 /* ReceiptParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParsingService.swift; sourceTree = "<group>"; };
+		002000000000000000000015 /* ReceiptScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptScannerViewModel.swift; sourceTree = "<group>"; };
+		002000000000000000000016 /* ScanReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanReceiptView.swift; sourceTree = "<group>"; };
+		002000000000000000000017 /* ReceiptReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptReviewView.swift; sourceTree = "<group>"; };
+		002000000000000000000018 /* ReceiptParsingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParsingServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				00200000000000000000000D /* BudgetEngineTests.swift */,
+				002000000000000000000018 /* ReceiptParsingServiceTests.swift */,
 			);
 			path = FamilySpendAITests;
 			sourceTree = "<group>";
@@ -114,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				002000000000000000000002 /* AppModels.swift */,
+				002000000000000000000012 /* ReceiptDraft.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -121,6 +137,8 @@
 		005000000000000000000006 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				002000000000000000000013 /* OCRService.swift */,
+				002000000000000000000014 /* ReceiptParsingService.swift */,
 				002000000000000000000003 /* BudgetEngine.swift */,
 				002000000000000000000004 /* AppServices.swift */,
 			);
@@ -131,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				002000000000000000000005 /* AppViewModels.swift */,
+				002000000000000000000015 /* ReceiptScannerViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -141,6 +160,8 @@
 				002000000000000000000006 /* RootView.swift */,
 				002000000000000000000007 /* OnboardingView.swift */,
 				002000000000000000000008 /* DashboardView.swift */,
+				002000000000000000000016 /* ScanReceiptView.swift */,
+				002000000000000000000017 /* ReceiptReviewView.swift */,
 				002000000000000000000009 /* TransactionsView.swift */,
 				00200000000000000000000A /* BudgetsView.swift */,
 				00200000000000000000000B /* SettingsView.swift */,
@@ -251,12 +272,18 @@
 			files = (
 				001000000000000000000001 /* FamilySpendAIApp.swift in Sources */,
 				001000000000000000000002 /* AppModels.swift in Sources */,
+				00100000000000000000000F /* ReceiptDraft.swift in Sources */,
+				001000000000000000000010 /* OCRService.swift in Sources */,
+				001000000000000000000011 /* ReceiptParsingService.swift in Sources */,
 				001000000000000000000003 /* BudgetEngine.swift in Sources */,
 				001000000000000000000004 /* AppServices.swift in Sources */,
 				001000000000000000000005 /* AppViewModels.swift in Sources */,
+				001000000000000000000012 /* ReceiptScannerViewModel.swift in Sources */,
 				001000000000000000000006 /* RootView.swift in Sources */,
 				001000000000000000000007 /* OnboardingView.swift in Sources */,
 				001000000000000000000008 /* DashboardView.swift in Sources */,
+				001000000000000000000013 /* ScanReceiptView.swift in Sources */,
+				001000000000000000000014 /* ReceiptReviewView.swift in Sources */,
 				001000000000000000000009 /* TransactionsView.swift in Sources */,
 				00100000000000000000000A /* BudgetsView.swift in Sources */,
 				00100000000000000000000B /* SettingsView.swift in Sources */,
@@ -269,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00100000000000000000000E /* BudgetEngineTests.swift in Sources */,
+				001000000000000000000015 /* ReceiptParsingServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

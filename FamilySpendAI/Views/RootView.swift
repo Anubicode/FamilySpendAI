@@ -34,11 +34,7 @@ private struct AppTabView: View {
             }
 
             NavigationStack {
-                PlaceholderFeatureView(
-                    title: "Receipt Scanning",
-                    description: "Phase 2 will add local OCR receipt capture and a human review step before anything is saved.",
-                    systemImage: "doc.viewfinder"
-                )
+                ScanReceiptView()
             }
             .tabItem {
                 Label("Scan", systemImage: "camera.viewfinder")
