@@ -1,6 +1,23 @@
 import Foundation
 import SwiftData
 
+struct AppLaunchOptions {
+    let isUITesting: Bool
+    let shouldResetData: Bool
+    let shouldSeedSampleData: Bool
+    let shouldSeedSampleReceipts: Bool
+
+    static let current = AppLaunchOptions(arguments: ProcessInfo.processInfo.arguments)
+
+    init(arguments: [String]) {
+        let argumentsSet = Set(arguments)
+        isUITesting = argumentsSet.contains("-uiTesting")
+        shouldResetData = argumentsSet.contains("-resetData")
+        shouldSeedSampleData = argumentsSet.contains("-seedSampleData")
+        shouldSeedSampleReceipts = argumentsSet.contains("-seedSampleReceipts")
+    }
+}
+
 enum SampleDataService {
     static func ensureGlobalDefaults(in context: ModelContext) throws {
         let settings = try context.fetch(FetchDescriptor<AppSettings>())
@@ -92,6 +109,35 @@ enum SampleDataService {
             return 100
         }
     }
+
+    static func ensureUITestProfile(in context: ModelContext) throws -> UserProfile {
+        let profiles = try context.fetch(FetchDescriptor<UserProfile>())
+        if let existingProfile = profiles.first {
+            return existingProfile
+        }
+
+        let profile = UserProfile(
+            familySize: 4,
+            numberOfAdults: 2,
+            numberOfChildren: 2,
+            province: .ontario,
+            city: "Toronto",
+            biweeklyNetSalary: 2_800,
+            firstKnownPayday: DateComponents(
+                calendar: .canadian,
+                year: 2026,
+                month: 4,
+                day: 3
+            ).date ?? .now,
+            rentOrMortgageAmount: 2_100,
+            otherFixedMonthlyExpenses: 900,
+            monthlySavingsTarget: 400,
+            mainGoal: .controlMonthlySpending
+        )
+
+        context.insert(profile)
+        return profile
+    }
 }
 
 enum DataResetService {
@@ -115,6 +161,27 @@ enum DataResetService {
         let items = try context.fetch(FetchDescriptor<T>())
         for item in items {
             context.delete(item)
+        }
+    }
+}
+
+enum AppLaunchBootstrapService {
+    static func prepareModelContainer(_ container: ModelContainer, options: AppLaunchOptions) throws {
+        let context = container.mainContext
+
+        if options.shouldResetData {
+            try DataResetService.deleteAllData(in: context)
+        }
+
+        try SampleDataService.ensureGlobalDefaults(in: context)
+
+        if options.shouldSeedSampleData || options.shouldSeedSampleReceipts {
+            let profile = try SampleDataService.ensureUITestProfile(in: context)
+            try SampleDataService.ensureCategories(in: context, profile: profile)
+        }
+
+        if context.hasChanges {
+            try context.save()
         }
     }
 }

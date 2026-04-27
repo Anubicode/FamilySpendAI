@@ -29,22 +29,28 @@ private struct AppTabView: View {
             NavigationStack {
                 DashboardView(profile: profile)
             }
+            .accessibilityIdentifier("tab.dashboard")
             .tabItem {
                 Label("Dashboard", systemImage: "rectangle.grid.2x2.fill")
+                    .accessibilityIdentifier("tab.dashboard")
             }
 
             NavigationStack {
                 ScanReceiptView()
             }
+            .accessibilityIdentifier("tab.scan")
             .tabItem {
                 Label("Scan", systemImage: "camera.viewfinder")
+                    .accessibilityIdentifier("tab.scan")
             }
 
             NavigationStack {
                 TransactionsView()
             }
+            .accessibilityIdentifier("tab.transactions")
             .tabItem {
                 Label("Transactions", systemImage: "list.bullet.clipboard")
+                    .accessibilityIdentifier("tab.transactions")
             }
 
             NavigationStack {

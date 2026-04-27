@@ -19,6 +19,7 @@ jobs:
       PROJECT_PATH: FamilySpendAI.xcodeproj
       SCHEME: FamilySpendAI
       TEST_TARGET: FamilySpendAITests
+      UI_TEST_TARGET: FamilySpendAIUITests
       DERIVED_DATA_PATH: ${{ github.workspace }}/DerivedData
       LOGS_DIR: ${{ github.workspace }}/ci_logs
 
@@ -89,6 +90,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$LOGS_DIR"
+          rm -rf "$LOGS_DIR/unit-tests.xcresult"
           echo "Testing with destination: $DESTINATION"
 
           if ! xcodebuild \
@@ -97,6 +99,7 @@ jobs:
             -destination "$DESTINATION" \
             -sdk iphonesimulator \
             -derivedDataPath "$DERIVED_DATA_PATH" \
+            -resultBundlePath "$LOGS_DIR/unit-tests.xcresult" \
             CODE_SIGNING_ALLOWED=NO \
             -only-testing:"$TEST_TARGET" \
             test \
@@ -107,6 +110,38 @@ jobs:
             grep -nE "error:|warning:|fatal error:" "$LOGS_DIR/xcodebuild-test.log" | tail -n 120 || true
             echo "---- Test log tail ----"
             tail -n 200 "$LOGS_DIR/xcodebuild-test.log" || true
+            echo "---- Available schemes after failure ----"
+            xcodebuild -list -project "$PROJECT_PATH" || true
+            echo "---- Available simulators after failure ----"
+            xcrun simctl list devices available || true
+            exit 1
+          fi
+
+      - name: Run UI receipt image tests
+        env:
+          DESTINATION: ${{ steps.simulator.outputs.destination }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS_DIR"
+          rm -rf "$LOGS_DIR/ui-tests.xcresult"
+          echo "Running UI tests with destination: $DESTINATION"
+
+          if ! xcodebuild \
+            -project "$PROJECT_PATH" \
+            -scheme "$SCHEME" \
+            -destination "$DESTINATION" \
+            -sdk iphonesimulator \
+            -derivedDataPath "$DERIVED_DATA_PATH" \
+            -resultBundlePath "$LOGS_DIR/ui-tests.xcresult" \
+            CODE_SIGNING_ALLOWED=NO \
+            -only-testing:"$UI_TEST_TARGET" \
+            test \
+            2>&1 | tee "$LOGS_DIR/xcodebuild-ui-test.log"; then
+            echo "::error::iOS UI receipt image tests failed."
+            echo "---- UI test errors and warnings ----"
+            grep -nE "error:|warning:|fatal error:" "$LOGS_DIR/xcodebuild-ui-test.log" | tail -n 120 || true
+            echo "---- UI test log tail ----"
+            tail -n 200 "$LOGS_DIR/xcodebuild-ui-test.log" || true
             echo "---- Available schemes after failure ----"
             xcodebuild -list -project "$PROJECT_PATH" || true
             echo "---- Available simulators after failure ----"

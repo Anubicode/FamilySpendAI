@@ -63,12 +63,14 @@ struct ReceiptReviewView: View {
                         systemImage: "exclamationmark.triangle.fill"
                     )
                     .foregroundStyle(.orange)
+                    .accessibilityIdentifier("receiptReview.lowConfidenceWarning")
                 }
             }
 
             Section("Detected values") {
                 TextField("Merchant", text: $merchantName)
                     .textInputAutocapitalization(.words)
+                    .accessibilityIdentifier("receiptReview.merchantField")
                 confidenceLabel("Merchant confidence", value: fieldConfidence.merchant)
 
                 DatePicker(
@@ -82,6 +84,7 @@ struct ReceiptReviewView: View {
                     ),
                     displayedComponents: .date
                 )
+                .accessibilityIdentifier("receiptReview.dateField")
                 confidenceLabel("Date confidence", value: fieldConfidence.date)
 
                 if !hasTransactionDate {
@@ -129,6 +132,7 @@ struct ReceiptReviewView: View {
                     TextEditor(text: $rawText)
                         .frame(minHeight: 220)
                         .font(.system(.footnote, design: .monospaced))
+                        .accessibilityIdentifier("receiptReview.rawOCRText")
                 }
             }
 
@@ -151,6 +155,7 @@ struct ReceiptReviewView: View {
                     saveReviewedReceipt()
                 }
                 .disabled(isSaving)
+                .accessibilityIdentifier("receiptReview.saveButton")
             }
         }
     }
@@ -165,6 +170,20 @@ struct ReceiptReviewView: View {
     private func currencyField(_ title: String, text: Binding<String>) -> some View {
         TextField(title, text: text)
             .keyboardType(.decimalPad)
+            .accessibilityIdentifier(accessibilityIdentifier(for: title))
+    }
+
+    private func accessibilityIdentifier(for title: String) -> String {
+        switch title {
+        case "Subtotal":
+            return "receiptReview.subtotalField"
+        case "Tax":
+            return "receiptReview.taxField"
+        case "Final total":
+            return "receiptReview.totalField"
+        default:
+            return "receiptReview.\(title.lowercased().replacingOccurrences(of: " ", with: ""))Field"
+        }
     }
 
     private func saveReviewedReceipt() {

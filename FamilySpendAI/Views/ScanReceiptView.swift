@@ -2,6 +2,7 @@ import PhotosUI
 import SwiftUI
 
 struct ScanReceiptView: View {
+    private let launchOptions = AppLaunchOptions.current
     @StateObject private var viewModel = ReceiptScannerViewModel()
     @State private var selectedPhotoItem: PhotosPickerItem?
 
@@ -10,6 +11,9 @@ struct ScanReceiptView: View {
             VStack(alignment: .leading, spacing: 20) {
                 introCard
                 sourceCard
+                if launchOptions.isUITesting && launchOptions.shouldSeedSampleReceipts {
+                    sampleReceiptsCard
+                }
                 statusCard
             }
             .padding()
@@ -61,6 +65,7 @@ struct ScanReceiptView: View {
             }
             .buttonStyle(.borderedProminent)
             .disabled(viewModel.isProcessing)
+            .accessibilityIdentifier("scan.importPhotoButton")
 
             Label("Photo Library access is handled by the system picker.", systemImage: "hand.raised")
                 .font(.subheadline)
@@ -73,6 +78,33 @@ struct ScanReceiptView: View {
             }
             .buttonStyle(.bordered)
             .disabled(true)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(cardBackground)
+    }
+
+    private var sampleReceiptsCard: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Label("UI test sample receipts", systemImage: "testtube.2")
+                .font(.headline)
+            Text("These synthetic receipts are generated in-app for UI testing only and run through the same OCR and parsing flow as a real imported image.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            ForEach(SyntheticReceiptService.uiTestingSamples) { sample in
+                Button {
+                    Task {
+                        await loadSampleReceipt(sample.kind)
+                    }
+                } label: {
+                    Text(sample.displayName)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .disabled(viewModel.isProcessing)
+                .accessibilityIdentifier(sample.buttonIdentifier)
+            }
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -132,5 +164,18 @@ struct ScanReceiptView: View {
             viewModel.clearResult()
             viewModel.errorMessage = "The selected image could not be loaded."
         }
+    }
+
+    @MainActor
+    private func loadSampleReceipt(_ kind: SyntheticReceiptKind) async {
+        selectedPhotoItem = nil
+
+        guard let data = SyntheticReceiptService.imageData(for: kind) else {
+            viewModel.clearResult()
+            viewModel.errorMessage = "The synthetic sample receipt could not be generated."
+            return
+        }
+
+        await viewModel.processSelectedImageData(data)
     }
 }

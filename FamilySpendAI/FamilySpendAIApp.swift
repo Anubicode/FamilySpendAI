@@ -4,6 +4,7 @@ import SwiftData
 @main
 struct FamilySpendAIApp: App {
     var sharedModelContainer: ModelContainer = {
+        let launchOptions = AppLaunchOptions.current
         let schema = Schema([
             UserProfile.self,
             BudgetMonth.self,
@@ -19,10 +20,15 @@ struct FamilySpendAIApp: App {
             AppSettings.self
         ])
 
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let configuration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: launchOptions.isUITesting
+        )
 
         do {
-            return try ModelContainer(for: schema, configurations: configuration)
+            let container = try ModelContainer(for: schema, configurations: configuration)
+            try AppLaunchBootstrapService.prepareModelContainer(container, options: launchOptions)
+            return container
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }

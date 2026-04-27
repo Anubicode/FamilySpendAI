@@ -28,10 +28,20 @@
 		001000000000000000000013 /* ScanReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000016 /* ScanReceiptView.swift */; };
 		001000000000000000000014 /* ReceiptReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000017 /* ReceiptReviewView.swift */; };
 		001000000000000000000015 /* ReceiptParsingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000018 /* ReceiptParsingServiceTests.swift */; };
+		001000000000000000000016 /* SyntheticReceiptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000019 /* SyntheticReceiptService.swift */; };
+		001000000000000000000017 /* OCRServiceImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000001A /* OCRServiceImageTests.swift */; };
+		001000000000000000000018 /* ReceiptImageFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000001C /* ReceiptImageFlowUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		004000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 007000000000000000000001;
+			remoteInfo = FamilySpendAI;
+		};
+		004000000000000000000002 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 006000000000000000000001 /* Project object */;
 			proxyType = 1;
@@ -65,6 +75,10 @@
 		002000000000000000000016 /* ScanReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanReceiptView.swift; sourceTree = "<group>"; };
 		002000000000000000000017 /* ReceiptReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptReviewView.swift; sourceTree = "<group>"; };
 		002000000000000000000018 /* ReceiptParsingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParsingServiceTests.swift; sourceTree = "<group>"; };
+		002000000000000000000019 /* SyntheticReceiptService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticReceiptService.swift; sourceTree = "<group>"; };
+		00200000000000000000001A /* OCRServiceImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRServiceImageTests.swift; sourceTree = "<group>"; };
+		00200000000000000000001B /* FamilySpendAIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FamilySpendAIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00200000000000000000001C /* ReceiptImageFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageFlowUITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +96,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		003000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -90,6 +111,7 @@
 			children = (
 				005000000000000000000002 /* FamilySpendAI */,
 				005000000000000000000003 /* FamilySpendAITests */,
+				00500000000000000000000A /* FamilySpendAIUITests */,
 				005000000000000000000004 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,8 +134,17 @@
 			children = (
 				00200000000000000000000D /* BudgetEngineTests.swift */,
 				002000000000000000000018 /* ReceiptParsingServiceTests.swift */,
+				00200000000000000000001A /* OCRServiceImageTests.swift */,
 			);
 			path = FamilySpendAITests;
+			sourceTree = "<group>";
+		};
+		00500000000000000000000A /* FamilySpendAIUITests */ = {
+			isa = PBXGroup;
+			children = (
+				00200000000000000000001C /* ReceiptImageFlowUITests.swift */,
+			);
+			path = FamilySpendAIUITests;
 			sourceTree = "<group>";
 		};
 		005000000000000000000004 /* Products */ = {
@@ -121,6 +152,7 @@
 			children = (
 				002000000000000000000010 /* FamilySpendAI.app */,
 				002000000000000000000011 /* FamilySpendAITests.xctest */,
+				00200000000000000000001B /* FamilySpendAIUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,6 +171,7 @@
 			children = (
 				002000000000000000000013 /* OCRService.swift */,
 				002000000000000000000014 /* ReceiptParsingService.swift */,
+				002000000000000000000019 /* SyntheticReceiptService.swift */,
 				002000000000000000000003 /* BudgetEngine.swift */,
 				002000000000000000000004 /* AppServices.swift */,
 			);
@@ -216,6 +249,23 @@
 			productReference = 002000000000000000000011 /* FamilySpendAITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		007000000000000000000003 /* FamilySpendAIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 008000000000000000000004 /* Build configuration list for PBXNativeTarget "FamilySpendAIUITests" */;
+			buildPhases = (
+				009000000000000000000003 /* Sources */,
+				003000000000000000000003 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				011000000000000000000002 /* PBXTargetDependency */,
+			);
+			name = FamilySpendAIUITests;
+			productName = FamilySpendAIUITests;
+			productReference = 00200000000000000000001B /* FamilySpendAIUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -230,6 +280,10 @@
 						CreatedOnToolsVersion = 16.0;
 					};
 					007000000000000000000002 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 007000000000000000000001;
+					};
+					007000000000000000000003 = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = 007000000000000000000001;
 					};
@@ -250,6 +304,7 @@
 			targets = (
 				007000000000000000000001 /* FamilySpendAI */,
 				007000000000000000000002 /* FamilySpendAITests */,
+				007000000000000000000003 /* FamilySpendAIUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -275,6 +330,7 @@
 				00100000000000000000000F /* ReceiptDraft.swift in Sources */,
 				001000000000000000000010 /* OCRService.swift in Sources */,
 				001000000000000000000011 /* ReceiptParsingService.swift in Sources */,
+				001000000000000000000016 /* SyntheticReceiptService.swift in Sources */,
 				001000000000000000000003 /* BudgetEngine.swift in Sources */,
 				001000000000000000000004 /* AppServices.swift in Sources */,
 				001000000000000000000005 /* AppViewModels.swift in Sources */,
@@ -297,6 +353,15 @@
 			files = (
 				00100000000000000000000E /* BudgetEngineTests.swift in Sources */,
 				001000000000000000000015 /* ReceiptParsingServiceTests.swift in Sources */,
+				001000000000000000000017 /* OCRServiceImageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				001000000000000000000018 /* ReceiptImageFlowUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +372,11 @@
 			isa = PBXTargetDependency;
 			target = 007000000000000000000001 /* FamilySpendAI */;
 			targetProxy = 004000000000000000000001 /* PBXContainerItemProxy */;
+		};
+		011000000000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 007000000000000000000001 /* FamilySpendAI */;
+			targetProxy = 004000000000000000000002 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -414,6 +484,44 @@
 			};
 			name = Release;
 		};
+		012000000000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.familiesspendai.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FamilySpendAI;
+			};
+			name = Debug;
+		};
+		012000000000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.familiesspendai.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FamilySpendAI;
+			};
+			name = Release;
+		};
 		012000000000000000000005 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -468,6 +576,15 @@
 			buildConfigurations = (
 				012000000000000000000003 /* Debug */,
 				012000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		008000000000000000000004 /* Build configuration list for PBXNativeTarget "FamilySpendAIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				012000000000000000000007 /* Debug */,
+				012000000000000000000008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
