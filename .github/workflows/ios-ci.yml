@@ -1,0 +1,116 @@
+name: iOS CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build And Test iOS App
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      PROJECT_PATH: FamilySpendAI.xcodeproj
+      SCHEME: FamilySpendAI
+      TEST_TARGET: FamilySpendAITests
+      DERIVED_DATA_PATH: ${{ github.workspace }}/DerivedData
+      LOGS_DIR: ${{ github.workspace }}/ci_logs
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Print Xcode version
+        run: |
+          set -euxo pipefail
+          xcodebuild -version
+          xcode-select -p
+          sw_vers
+
+      - name: Print project files and schemes
+        run: |
+          set -euxo pipefail
+          find . -maxdepth 4 \( -name "*.xcodeproj" -o -name "*.xcscheme" \) | sort
+          xcodebuild -list -project "$PROJECT_PATH"
+
+      - name: Print available iOS simulators
+        run: |
+          set -euxo pipefail
+          xcrun simctl list devices available
+
+      - name: Select simulator
+        id: simulator
+        run: |
+          set -euo pipefail
+          destination="$(bash ci/select-simulator.sh)"
+          echo "destination=$destination" >> "$GITHUB_OUTPUT"
+          echo "Selected destination: $destination"
+
+      - name: Build for iOS Simulator
+        env:
+          DESTINATION: ${{ steps.simulator.outputs.destination }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS_DIR"
+          echo "Building with destination: $DESTINATION"
+
+          if ! xcodebuild \
+            -project "$PROJECT_PATH" \
+            -scheme "$SCHEME" \
+            -destination "$DESTINATION" \
+            -sdk iphonesimulator \
+            -derivedDataPath "$DERIVED_DATA_PATH" \
+            CODE_SIGNING_ALLOWED=NO \
+            build \
+            2>&1 | tee "$LOGS_DIR/xcodebuild-build.log"; then
+            echo "::error::iOS build failed."
+            echo "---- Build log tail ----"
+            tail -n 200 "$LOGS_DIR/xcodebuild-build.log" || true
+            echo "---- Available schemes after failure ----"
+            xcodebuild -list -project "$PROJECT_PATH" || true
+            echo "---- Available simulators after failure ----"
+            xcrun simctl list devices available || true
+            exit 1
+          fi
+
+      - name: Run unit tests
+        env:
+          DESTINATION: ${{ steps.simulator.outputs.destination }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS_DIR"
+          echo "Testing with destination: $DESTINATION"
+
+          if ! xcodebuild \
+            -project "$PROJECT_PATH" \
+            -scheme "$SCHEME" \
+            -destination "$DESTINATION" \
+            -sdk iphonesimulator \
+            -derivedDataPath "$DERIVED_DATA_PATH" \
+            CODE_SIGNING_ALLOWED=NO \
+            -only-testing:"$TEST_TARGET" \
+            test \
+            2>&1 | tee "$LOGS_DIR/xcodebuild-test.log"; then
+            echo "::error::iOS unit tests failed."
+            echo "If the blocker is scheme visibility, target discovery, simulator availability, or a compile/test failure, it will be in the xcodebuild log below."
+            echo "---- Test log tail ----"
+            tail -n 200 "$LOGS_DIR/xcodebuild-test.log" || true
+            echo "---- Available schemes after failure ----"
+            xcodebuild -list -project "$PROJECT_PATH" || true
+            echo "---- Available simulators after failure ----"
+            xcrun simctl list devices available || true
+            exit 1
+          fi
+
+      - name: Upload CI logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ci-logs
+          path: ${{ env.LOGS_DIR }}

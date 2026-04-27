@@ -1,0 +1,25 @@
+# Xcode user data
+xcuserdata/
+*.xcuserstate
+
+# Xcode build products
+DerivedData/
+build/
+
+# Swift Package Manager
+.build/
+Package.resolved
+
+# macOS
+.DS_Store
+
+# Logs
+ci_logs/
+
+# Local environment
+.env
+.env.*
+
+# Windows noise
+Thumbs.db
+Desktop.ini

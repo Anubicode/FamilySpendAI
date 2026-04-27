@@ -1,0 +1,457 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		001000000000000000000001 /* FamilySpendAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000001 /* FamilySpendAIApp.swift */; };
+		001000000000000000000002 /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000002 /* AppModels.swift */; };
+		001000000000000000000003 /* BudgetEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000003 /* BudgetEngine.swift */; };
+		001000000000000000000004 /* AppServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000004 /* AppServices.swift */; };
+		001000000000000000000005 /* AppViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000005 /* AppViewModels.swift */; };
+		001000000000000000000006 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000006 /* RootView.swift */; };
+		001000000000000000000007 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000007 /* OnboardingView.swift */; };
+		001000000000000000000008 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000008 /* DashboardView.swift */; };
+		001000000000000000000009 /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002000000000000000000009 /* TransactionsView.swift */; };
+		00100000000000000000000A /* BudgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000A /* BudgetsView.swift */; };
+		00100000000000000000000B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000B /* SettingsView.swift */; };
+		00100000000000000000000C /* PlaceholderFeatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000C /* PlaceholderFeatureView.swift */; };
+		00100000000000000000000D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000E /* Assets.xcassets */; };
+		00100000000000000000000E /* BudgetEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00200000000000000000000D /* BudgetEngineTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		004000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 007000000000000000000001;
+			remoteInfo = FamilySpendAI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		002000000000000000000001 /* FamilySpendAIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySpendAIApp.swift; sourceTree = "<group>"; };
+		002000000000000000000002 /* AppModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModels.swift; sourceTree = "<group>"; };
+		002000000000000000000003 /* BudgetEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEngine.swift; sourceTree = "<group>"; };
+		002000000000000000000004 /* AppServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppServices.swift; sourceTree = "<group>"; };
+		002000000000000000000005 /* AppViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModels.swift; sourceTree = "<group>"; };
+		002000000000000000000006 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		002000000000000000000007 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		002000000000000000000008 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		002000000000000000000009 /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
+		00200000000000000000000A /* BudgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
+		00200000000000000000000B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		00200000000000000000000C /* PlaceholderFeatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderFeatureView.swift; sourceTree = "<group>"; };
+		00200000000000000000000D /* BudgetEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEngineTests.swift; sourceTree = "<group>"; };
+		00200000000000000000000E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00200000000000000000000F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		002000000000000000000010 /* FamilySpendAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FamilySpendAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		002000000000000000000011 /* FamilySpendAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FamilySpendAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		003000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		003000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		005000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				005000000000000000000002 /* FamilySpendAI */,
+				005000000000000000000003 /* FamilySpendAITests */,
+				005000000000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		005000000000000000000002 /* FamilySpendAI */ = {
+			isa = PBXGroup;
+			children = (
+				002000000000000000000001 /* FamilySpendAIApp.swift */,
+				005000000000000000000005 /* Models */,
+				005000000000000000000006 /* Services */,
+				005000000000000000000007 /* ViewModels */,
+				005000000000000000000008 /* Views */,
+				005000000000000000000009 /* Resources */,
+			);
+			path = FamilySpendAI;
+			sourceTree = "<group>";
+		};
+		005000000000000000000003 /* FamilySpendAITests */ = {
+			isa = PBXGroup;
+			children = (
+				00200000000000000000000D /* BudgetEngineTests.swift */,
+			);
+			path = FamilySpendAITests;
+			sourceTree = "<group>";
+		};
+		005000000000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				002000000000000000000010 /* FamilySpendAI.app */,
+				002000000000000000000011 /* FamilySpendAITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		005000000000000000000005 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				002000000000000000000002 /* AppModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		005000000000000000000006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				002000000000000000000003 /* BudgetEngine.swift */,
+				002000000000000000000004 /* AppServices.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		005000000000000000000007 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				002000000000000000000005 /* AppViewModels.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		005000000000000000000008 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				002000000000000000000006 /* RootView.swift */,
+				002000000000000000000007 /* OnboardingView.swift */,
+				002000000000000000000008 /* DashboardView.swift */,
+				002000000000000000000009 /* TransactionsView.swift */,
+				00200000000000000000000A /* BudgetsView.swift */,
+				00200000000000000000000B /* SettingsView.swift */,
+				00200000000000000000000C /* PlaceholderFeatureView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		005000000000000000000009 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				00200000000000000000000E /* Assets.xcassets */,
+				00200000000000000000000F /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		007000000000000000000001 /* FamilySpendAI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 008000000000000000000001 /* Build configuration list for PBXNativeTarget "FamilySpendAI" */;
+			buildPhases = (
+				009000000000000000000001 /* Sources */,
+				003000000000000000000001 /* Frameworks */,
+				010000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FamilySpendAI;
+			productName = FamilySpendAI;
+			productReference = 002000000000000000000010 /* FamilySpendAI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		007000000000000000000002 /* FamilySpendAITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 008000000000000000000002 /* Build configuration list for PBXNativeTarget "FamilySpendAITests" */;
+			buildPhases = (
+				009000000000000000000002 /* Sources */,
+				003000000000000000000002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				011000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = FamilySpendAITests;
+			productName = FamilySpendAITests;
+			productReference = 002000000000000000000011 /* FamilySpendAITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		006000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					007000000000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					007000000000000000000002 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 007000000000000000000001;
+					};
+				};
+			};
+			buildConfigurationList = 008000000000000000000003 /* Build configuration list for PBXProject "FamilySpendAI" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 005000000000000000000001;
+			productRefGroup = 005000000000000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				007000000000000000000001 /* FamilySpendAI */,
+				007000000000000000000002 /* FamilySpendAITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		010000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00100000000000000000000D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		009000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				001000000000000000000001 /* FamilySpendAIApp.swift in Sources */,
+				001000000000000000000002 /* AppModels.swift in Sources */,
+				001000000000000000000003 /* BudgetEngine.swift in Sources */,
+				001000000000000000000004 /* AppServices.swift in Sources */,
+				001000000000000000000005 /* AppViewModels.swift in Sources */,
+				001000000000000000000006 /* RootView.swift in Sources */,
+				001000000000000000000007 /* OnboardingView.swift in Sources */,
+				001000000000000000000008 /* DashboardView.swift in Sources */,
+				001000000000000000000009 /* TransactionsView.swift in Sources */,
+				00100000000000000000000A /* BudgetsView.swift in Sources */,
+				00100000000000000000000B /* SettingsView.swift in Sources */,
+				00100000000000000000000C /* PlaceholderFeatureView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009000000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00100000000000000000000E /* BudgetEngineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		011000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 007000000000000000000001 /* FamilySpendAI */;
+			targetProxy = 004000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		012000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FamilySpendAI/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.familiesspendai.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		012000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FamilySpendAI/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.familiesspendai.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		012000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.familiesspendai.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FamilySpendAI.app/FamilySpendAI";
+			};
+			name = Debug;
+		};
+		012000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.familiesspendai.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FamilySpendAI.app/FamilySpendAI";
+			};
+			name = Release;
+		};
+		012000000000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		012000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		008000000000000000000001 /* Build configuration list for PBXNativeTarget "FamilySpendAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				012000000000000000000001 /* Debug */,
+				012000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		008000000000000000000002 /* Build configuration list for PBXNativeTarget "FamilySpendAITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				012000000000000000000003 /* Debug */,
+				012000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		008000000000000000000003 /* Build configuration list for PBXProject "FamilySpendAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				012000000000000000000005 /* Debug */,
+				012000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 006000000000000000000001 /* Project object */;
+}
