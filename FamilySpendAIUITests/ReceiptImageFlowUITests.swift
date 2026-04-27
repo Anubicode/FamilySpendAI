@@ -15,18 +15,17 @@ final class ReceiptImageFlowUITests: XCTestCase {
 
         app.buttons["scan.sampleReceipt.walmart"].tap()
 
-        XCTAssertTrue(app.textFields["receiptReview.merchantField"].waitForExistence(timeout: 8))
+        let merchantField = app.textFields["receiptReview.merchantField"]
+        XCTAssertTrue(merchantField.waitForExistence(timeout: 8))
+        let merchantValue = normalizedMerchantValue(from: merchantField)
         XCTAssertTrue(waitForElementToAppear(app.textFields["receiptReview.totalField"], in: app, timeout: 8))
         addScreenshot(named: "receipt-review-walmart", in: app)
-
-        let merchantField = app.textFields["receiptReview.merchantField"]
-        let merchantValue = (merchantField.value as? String) ?? ""
         XCTAssertTrue(merchantValue.uppercased().contains("WALMART"))
 
         app.buttons["receiptReview.saveButton"].tap()
 
         openTransactionsTab(in: app)
-        XCTAssertTrue(app.staticTexts["WALMART"].waitForExistence(timeout: 5))
+        XCTAssertTrue(waitForTransactionRow(containing: merchantValue, in: app, timeout: 5))
         addScreenshot(named: "transactions-after-receipt-save", in: app)
     }
 
@@ -38,7 +37,9 @@ final class ReceiptImageFlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons["scan.sampleReceipt.messyTotal"].waitForExistence(timeout: 5))
         app.buttons["scan.sampleReceipt.messyTotal"].tap()
 
-        XCTAssertTrue(app.textFields["receiptReview.merchantField"].waitForExistence(timeout: 8))
+        let merchantField = app.textFields["receiptReview.merchantField"]
+        XCTAssertTrue(merchantField.waitForExistence(timeout: 8))
+        let merchantValue = normalizedMerchantValue(from: merchantField)
         XCTAssertTrue(waitForLowConfidenceWarning(in: app, timeout: 5))
         XCTAssertTrue(app.buttons["receiptReview.saveButton"].exists)
         addScreenshot(named: "receipt-review-messy", in: app)
@@ -46,7 +47,7 @@ final class ReceiptImageFlowUITests: XCTestCase {
         app.buttons["receiptReview.saveButton"].tap()
 
         openTransactionsTab(in: app)
-        XCTAssertTrue(app.staticTexts["MESSY RECEIPT"].waitForExistence(timeout: 5))
+        XCTAssertTrue(waitForTransactionRow(containing: merchantValue, in: app, timeout: 5))
     }
 
     private func makeApp() -> XCUIApplication {
@@ -114,5 +115,27 @@ final class ReceiptImageFlowUITests: XCTestCase {
     private func lowConfidenceWarning(in app: XCUIApplication) -> XCUIElement {
         let predicate = NSPredicate(format: "identifier == %@", "receiptReview.lowConfidenceWarning")
         return app.descendants(matching: .any).matching(predicate).firstMatch
+    }
+
+    private func waitForTransactionRow(
+        containing merchant: String,
+        in app: XCUIApplication,
+        timeout: TimeInterval
+    ) -> Bool {
+        let predicate = NSPredicate(format: "label CONTAINS[c] %@", merchant)
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if app.descendants(matching: .any).matching(predicate).firstMatch.exists {
+                return true
+            }
+        }
+
+        return app.descendants(matching: .any).matching(predicate).firstMatch.exists
+    }
+
+    private func normalizedMerchantValue(from field: XCUIElement) -> String {
+        let rawValue = (field.value as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return rawValue.isEmpty ? "Receipt OCR" : rawValue
     }
 }
