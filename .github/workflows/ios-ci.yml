@@ -43,6 +43,8 @@ jobs:
         run: |
           set -euxo pipefail
           xcrun simctl list devices available
+          xcrun simctl list runtimes available
+          xcrun simctl list devicetypes
 
       - name: Select simulator
         id: simulator
