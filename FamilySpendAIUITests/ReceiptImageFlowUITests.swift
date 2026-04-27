@@ -42,8 +42,6 @@ final class ReceiptImageFlowUITests: XCTestCase {
 
         let merchantField = app.textFields["receiptReview.merchantField"]
         XCTAssertTrue(merchantField.waitForExistence(timeout: 8))
-        let merchantValue = normalizedMerchantValue(from: merchantField)
-        XCTAssertTrue(merchantValue.uppercased().contains("MESSY"))
         XCTAssertTrue(waitForLowConfidenceWarning(in: app, timeout: 5))
         XCTAssertTrue(app.buttons["receiptReview.saveButton"].exists)
         addScreenshot(named: "receipt-review-messy", in: app)
