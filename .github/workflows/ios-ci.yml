@@ -72,6 +72,8 @@ jobs:
             build \
             2>&1 | tee "$LOGS_DIR/xcodebuild-build.log"; then
             echo "::error::iOS build failed."
+            echo "---- Build errors and warnings ----"
+            grep -nE "error:|warning:|fatal error:" "$LOGS_DIR/xcodebuild-build.log" | tail -n 120 || true
             echo "---- Build log tail ----"
             tail -n 200 "$LOGS_DIR/xcodebuild-build.log" || true
             echo "---- Available schemes after failure ----"
@@ -101,6 +103,8 @@ jobs:
             2>&1 | tee "$LOGS_DIR/xcodebuild-test.log"; then
             echo "::error::iOS unit tests failed."
             echo "If the blocker is scheme visibility, target discovery, simulator availability, or a compile/test failure, it will be in the xcodebuild log below."
+            echo "---- Test errors and warnings ----"
+            grep -nE "error:|warning:|fatal error:" "$LOGS_DIR/xcodebuild-test.log" | tail -n 120 || true
             echo "---- Test log tail ----"
             tail -n 200 "$LOGS_DIR/xcodebuild-test.log" || true
             echo "---- Available schemes after failure ----"
