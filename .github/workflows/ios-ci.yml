@@ -149,9 +149,24 @@ jobs:
             exit 1
           fi
 
+      - name: Export UI test screenshots
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$LOGS_DIR/ui_screenshots"
+          bash ci/export-ui-screenshots.sh "$LOGS_DIR/ui-tests.xcresult" "$LOGS_DIR/ui_screenshots"
+
       - name: Upload CI logs
         if: always()
         uses: actions/upload-artifact@v6
         with:
           name: ios-ci-logs
           path: ${{ env.LOGS_DIR }}
+
+      - name: Upload UI test screenshots
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ui-test-screenshots
+          path: ${{ env.LOGS_DIR }}/ui_screenshots
+          if-no-files-found: warn
