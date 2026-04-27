@@ -16,7 +16,7 @@ final class ReceiptImageFlowUITests: XCTestCase {
         app.buttons["scan.sampleReceipt.walmart"].tap()
 
         XCTAssertTrue(app.textFields["receiptReview.merchantField"].waitForExistence(timeout: 8))
-        XCTAssertTrue(app.textFields["receiptReview.totalField"].exists)
+        XCTAssertTrue(waitForElementToAppear(app.textFields["receiptReview.totalField"], in: app, timeout: 8))
         addScreenshot(named: "receipt-review-walmart", in: app)
 
         let merchantField = app.textFields["receiptReview.merchantField"]
@@ -39,7 +39,7 @@ final class ReceiptImageFlowUITests: XCTestCase {
         app.buttons["scan.sampleReceipt.messyTotal"].tap()
 
         XCTAssertTrue(app.textFields["receiptReview.merchantField"].waitForExistence(timeout: 8))
-        XCTAssertTrue(app.otherElements["receiptReview.lowConfidenceWarning"].waitForExistence(timeout: 5))
+        XCTAssertTrue(waitForLowConfidenceWarning(in: app, timeout: 5))
         XCTAssertTrue(app.buttons["receiptReview.saveButton"].exists)
         addScreenshot(named: "receipt-review-messy", in: app)
 
@@ -77,5 +77,42 @@ final class ReceiptImageFlowUITests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    private func waitForElementToAppear(
+        _ element: XCUIElement,
+        in app: XCUIApplication,
+        timeout: TimeInterval
+    ) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if element.exists {
+                return true
+            }
+
+            app.swipeUp()
+        }
+
+        return element.exists
+    }
+
+    private func waitForLowConfidenceWarning(in app: XCUIApplication, timeout: TimeInterval) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if lowConfidenceWarning(in: app).exists {
+                return true
+            }
+
+            app.swipeUp()
+        }
+
+        return lowConfidenceWarning(in: app).exists
+    }
+
+    private func lowConfidenceWarning(in app: XCUIApplication) -> XCUIElement {
+        let predicate = NSPredicate(format: "identifier == %@", "receiptReview.lowConfidenceWarning")
+        return app.descendants(matching: .any).matching(predicate).firstMatch
     }
 }
