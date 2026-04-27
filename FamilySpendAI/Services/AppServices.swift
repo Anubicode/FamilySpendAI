@@ -19,6 +19,7 @@ struct AppLaunchOptions {
 }
 
 enum SampleDataService {
+    @MainActor
     static func ensureGlobalDefaults(in context: ModelContext) throws {
         let settings = try context.fetch(FetchDescriptor<AppSettings>())
         if settings.isEmpty {
@@ -41,6 +42,7 @@ enum SampleDataService {
         }
     }
 
+    @MainActor
     static func ensureCategories(in context: ModelContext, profile: UserProfile) throws {
         let categories = try context.fetch(FetchDescriptor<BudgetCategory>())
         if categories.isEmpty {
@@ -110,6 +112,7 @@ enum SampleDataService {
         }
     }
 
+    @MainActor
     static func ensureUITestProfile(in context: ModelContext) throws -> UserProfile {
         let profiles = try context.fetch(FetchDescriptor<UserProfile>())
         if let existingProfile = profiles.first {
@@ -141,6 +144,7 @@ enum SampleDataService {
 }
 
 enum DataResetService {
+    @MainActor
     static func deleteAllData(in context: ModelContext) throws {
         try deleteAll(UserProfile.self, in: context)
         try deleteAll(BudgetMonth.self, in: context)
@@ -157,6 +161,7 @@ enum DataResetService {
         try context.save()
     }
 
+    @MainActor
     private static func deleteAll<T: PersistentModel>(_ type: T.Type, in context: ModelContext) throws {
         let items = try context.fetch(FetchDescriptor<T>())
         for item in items {
@@ -166,6 +171,7 @@ enum DataResetService {
 }
 
 enum AppLaunchBootstrapService {
+    @MainActor
     static func prepareModelContainer(_ container: ModelContainer, options: AppLaunchOptions) throws {
         let context = container.mainContext
 

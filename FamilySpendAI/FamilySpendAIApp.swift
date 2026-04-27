@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+@MainActor
 @main
 struct FamilySpendAIApp: App {
     var sharedModelContainer: ModelContainer = {
