@@ -11,30 +11,32 @@ if ! command -v python3 >/dev/null 2>&1; then
   exit 1
 fi
 
-SIMULATOR_JSON="$(xcrun simctl list -j devices available)"
-RUNTIMES_JSON="$(xcrun simctl list -j runtimes available)"
-DEVICE_TYPES_JSON="$(xcrun simctl list -j devicetypes)"
+simulator_json="$(xcrun simctl list -j devices available)"
+runtimes_json="$(xcrun simctl list -j runtimes available)"
+device_types_json="$(xcrun simctl list -j devicetypes)"
 
-parse_result="$(
-  SIMULATOR_JSON="$SIMULATOR_JSON" \
-  RUNTIMES_JSON="$RUNTIMES_JSON" \
-  DEVICE_TYPES_JSON="$DEVICE_TYPES_JSON" \
+selection_json="$(
+  SIMULATOR_JSON="$simulator_json" \
+  RUNTIMES_JSON="$runtimes_json" \
+  DEVICE_TYPES_JSON="$device_types_json" \
   python3 - <<'PY'
 import json
 import os
 import re
 import sys
 
+def fail(message: str) -> None:
+    print(json.dumps({"status": "error", "message": message}))
+    sys.exit(0)
+
 def load_env_json(name: str):
     raw = os.environ.get(name, "")
     if not raw.strip():
-        print(f"ERROR: {name} was empty.", file=sys.stderr)
-        sys.exit(1)
+        fail(f"{name} was empty.")
     try:
         return json.loads(raw)
     except json.JSONDecodeError as error:
-        print(f"ERROR: Failed to parse {name}: {error}", file=sys.stderr)
-        sys.exit(1)
+        fail(f"Failed to parse {name}: {error}")
 
 devices_payload = load_env_json("SIMULATOR_JSON")
 runtimes_payload = load_env_json("RUNTIMES_JSON")
@@ -67,8 +69,11 @@ for runtime, devices in devices_payload.get("devices", {}).items():
 if choices:
     choices.sort(key=lambda item: (item[0], item[1]), reverse=True)
     version, name, udid, runtime = choices[0]
-    print(f"EXISTING|Selected simulator: {name} ({runtime}) [{udid}]")
-    print(f"platform=iOS Simulator,id={udid}")
+    print(json.dumps({
+        "status": "existing",
+        "message": f"Selected existing simulator: {name} ({runtime}) [{udid}]",
+        "destination": f"platform=iOS Simulator,id={udid}"
+    }))
     sys.exit(0)
 
 available_runtimes = []
@@ -82,8 +87,7 @@ for runtime in runtimes_payload.get("runtimes", []):
     available_runtimes.append((version, runtime.get("name", identifier), identifier))
 
 if not available_runtimes:
-    print("ERROR|No available iOS runtime was found on this runner.")
-    sys.exit(1)
+    fail("No available iOS runtime was found on this runner.")
 
 preferred_iphone_names = [
     "iPhone 16 Pro",
@@ -117,66 +121,108 @@ if not selected_device_type_identifier:
         selected_device_type_name, selected_device_type_identifier = iphone_types[0]
 
 if not selected_device_type_identifier:
-    print("ERROR|No iPhone device type was found on this runner.")
-    sys.exit(1)
+    fail("No iPhone device type was found on this runner.")
 
 available_runtimes.sort(key=lambda item: item[0], reverse=True)
 runtime_version, runtime_name, runtime_identifier = available_runtimes[0]
 simulator_name = "FamilySpendAI CI iPhone"
 
-print(
-    "CREATE|"
-    f"{simulator_name}|"
-    f"{selected_device_type_name}|"
-    f"{selected_device_type_identifier}|"
-    f"{runtime_name}|"
-    f"{runtime_identifier}"
-)
+print(json.dumps({
+    "status": "create",
+    "message": (
+        f"No existing iPhone simulator was available. Create one using "
+        f"{selected_device_type_name} on {runtime_name}."
+    ),
+    "simulator_name": simulator_name,
+    "device_type_name": selected_device_type_name,
+    "device_type_identifier": selected_device_type_identifier,
+    "runtime_name": runtime_name,
+    "runtime_identifier": runtime_identifier
+}))
 PY
 )"
 
-IFS='|' read -r mode arg1 arg2 arg3 arg4 arg5 <<<"$parse_result"
+selection_destination="$(
+  SELECTION_JSON="$selection_json" python3 - <<'PY'
+import json
+import os
+import sys
 
-case "$mode" in
-  EXISTING)
-    echo "$arg1" >&2
-    echo "$arg2"
-    ;;
-  CREATE)
-    simulator_name="$arg1"
-    device_type_name="$arg2"
-    device_type_identifier="$arg3"
-    runtime_name="$arg4"
-    runtime_identifier="$arg5"
+payload = json.loads(os.environ["SELECTION_JSON"])
+status = payload.get("status")
 
-    echo "No existing iPhone simulator was available. Creating one." >&2
-    echo "Using device type: $device_type_name ($device_type_identifier)" >&2
-    echo "Using runtime: $runtime_name ($runtime_identifier)" >&2
+if status == "existing":
+    print(payload["message"], file=sys.stderr)
+    print(payload["destination"])
+    sys.exit(0)
 
-    created_udid="$(
-      xcrun simctl create "$simulator_name" "$device_type_identifier" "$runtime_identifier"
-    )"
+if status == "create":
+    print(payload["message"], file=sys.stderr)
+    sys.exit(10)
 
-    if [[ -z "$created_udid" ]]; then
-      echo "ERROR: xcrun simctl create did not return a simulator UDID." >&2
-      exit 1
-    fi
+if status == "error":
+    print(f"ERROR: {payload.get('message', 'Unknown selector error.')}", file=sys.stderr)
+    sys.exit(20)
 
-    echo "Created simulator: $simulator_name [$created_udid]" >&2
-    echo "platform=iOS Simulator,id=$created_udid"
-    ;;
-  ERROR)
-    echo "$arg1" >&2
-    echo "---- Available runtimes ----" >&2
-    xcrun simctl list runtimes available >&2 || true
-    echo "---- Available device types ----" >&2
-    xcrun simctl list devicetypes >&2 || true
-    echo "---- Available devices ----" >&2
-    xcrun simctl list devices available >&2 || true
+print(f"ERROR: Unexpected selector payload: {payload}", file=sys.stderr)
+sys.exit(30)
+PY
+)"
+selection_status=$?
+
+if [[ $selection_status -eq 0 ]]; then
+  if [[ -z "$selection_destination" ]]; then
+    echo "ERROR: Simulator selection produced an empty xcodebuild destination." >&2
     exit 1
-    ;;
-  *)
-    echo "ERROR: Unexpected selector output: $parse_result" >&2
+  fi
+  echo "Using destination: $selection_destination" >&2
+  echo "$selection_destination"
+  exit 0
+fi
+
+if [[ $selection_status -eq 10 ]]; then
+  create_values="$(
+    SELECTION_JSON="$selection_json" python3 - <<'PY'
+import json
+import os
+
+payload = json.loads(os.environ["SELECTION_JSON"])
+print(payload["simulator_name"])
+print(payload["device_type_name"])
+print(payload["device_type_identifier"])
+print(payload["runtime_name"])
+print(payload["runtime_identifier"])
+PY
+  )"
+
+  mapfile -t create_parts <<<"$create_values"
+  simulator_name="${create_parts[0]}"
+  device_type_name="${create_parts[1]}"
+  device_type_identifier="${create_parts[2]}"
+  runtime_name="${create_parts[3]}"
+  runtime_identifier="${create_parts[4]}"
+
+  echo "Creating simulator: $simulator_name" >&2
+  echo "Device type: $device_type_name ($device_type_identifier)" >&2
+  echo "Runtime: $runtime_name ($runtime_identifier)" >&2
+
+  created_udid="$(xcrun simctl create "$simulator_name" "$device_type_identifier" "$runtime_identifier")"
+  if [[ -z "$created_udid" ]]; then
+    echo "ERROR: xcrun simctl create did not return a simulator UDID." >&2
     exit 1
-    ;;
-esac
+  fi
+
+  destination="platform=iOS Simulator,id=$created_udid"
+  echo "Created simulator UDID: $created_udid" >&2
+  echo "Using destination: $destination" >&2
+  echo "$destination"
+  exit 0
+fi
+
+echo "---- Available runtimes ----" >&2
+xcrun simctl list runtimes available >&2 || true
+echo "---- Available device types ----" >&2
+xcrun simctl list devicetypes >&2 || true
+echo "---- Available devices ----" >&2
+xcrun simctl list devices available >&2 || true
+exit 1
